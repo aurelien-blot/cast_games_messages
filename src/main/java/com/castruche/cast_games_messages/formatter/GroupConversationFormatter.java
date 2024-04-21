@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroupConversationFormatter implements IFormatter<GroupConversation, GroupConversationDto>{
 
-    private UserFormatter userFormatter;
+    private PlayerFormatter playerFormatter;
 
-    public GroupConversationFormatter(UserFormatter userFormatter){
-        this.userFormatter = userFormatter;
+    public GroupConversationFormatter(PlayerFormatter playerFormatter){
+        this.playerFormatter = playerFormatter;
     }
     @Override
     public GroupConversationDto entityToDto(GroupConversation entity) {
@@ -23,8 +23,8 @@ public class GroupConversationFormatter implements IFormatter<GroupConversation,
         GroupConversationDto dto = new GroupConversationDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        if(entity.getUsers() != null){
-            dto.setUsers(userFormatter.entityToDto(entity.getUsers()));
+        if(entity.getPlayers() != null){
+            dto.setPlayers(playerFormatter.entityToDto(entity.getPlayers()));
         }
         return dto;
     }

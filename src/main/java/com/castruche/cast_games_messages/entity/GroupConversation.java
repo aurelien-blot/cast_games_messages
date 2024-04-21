@@ -14,11 +14,11 @@ public class GroupConversation extends Conversation {
 
     @ManyToMany
     @JoinTable(
-        name = "conversation_user",
+        name = "conversation_player",
         joinColumns = @JoinColumn(name = "conversation_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
+        inverseJoinColumns = @JoinColumn(name = "player_id")
     )
-    private List<User> users = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -28,11 +28,11 @@ public class GroupConversation extends Conversation {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }

@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PrivateConversationFormatter implements IFormatter<PrivateConversation, PrivateConversationDto>{
 
-    private UserFormatter userFormatter;
+    private PlayerFormatter playerFormatter;
 
-    public PrivateConversationFormatter(UserFormatter userFormatter){
-        this.userFormatter = userFormatter;
+    public PrivateConversationFormatter(PlayerFormatter playerFormatter){
+        this.playerFormatter = playerFormatter;
     }
     @Override
     public PrivateConversationDto entityToDto(PrivateConversation entity) {
@@ -20,11 +20,11 @@ public class PrivateConversationFormatter implements IFormatter<PrivateConversat
         }
         PrivateConversationDto dto = new PrivateConversationDto();
         dto.setId(entity.getId());
-        if(entity.getUser1() != null){
-            dto.setUser1(userFormatter.entityToDto(entity.getUser1()));
+        if(entity.getPlayer1() != null){
+            dto.setPlayer1(playerFormatter.entityToDto(entity.getPlayer1()));
         }
-        if(entity.getUser2() != null){
-            dto.setUser2(userFormatter.entityToDto(entity.getUser2()));
+        if(entity.getPlayer2() != null){
+            dto.setPlayer2(playerFormatter.entityToDto(entity.getPlayer2()));
         }
         return dto;
     }

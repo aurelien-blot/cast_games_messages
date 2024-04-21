@@ -2,6 +2,7 @@ package com.castruche.cast_games_messages.service;
 
 import com.castruche.cast_games_messages.dao.MessageRepository;
 import com.castruche.cast_games_messages.dto.MessageDto;
+import com.castruche.cast_games_messages.dto.MessageReceptionDto;
 import com.castruche.cast_games_messages.entity.Message;
 import com.castruche.cast_games_messages.formatter.MessageFormatter;
 import jakarta.transaction.Transactional;
@@ -24,13 +25,6 @@ public class MessageService extends GenericService<Message, MessageDto>{
         super(messageRepository, messageFormatter);
         this.messageRepository = messageRepository;
         this.messageFormatter = messageFormatter;
-    }
-
-    @Transactional
-    public MessageDto send(MessageDto messageDto){
-        Message message = messageFormatter.dtoToEntity(messageDto);
-        message = messageRepository.save(message);
-        return messageFormatter.entityToDto(message);
     }
 
 

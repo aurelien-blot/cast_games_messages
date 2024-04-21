@@ -6,24 +6,24 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class PrivateConversation extends Conversation {
     @OneToOne
-    private User user1;
+    private Player player1;
 
     @OneToOne
-    private User user2;
+    private Player player2;
 
-    public User getUser1() {
-        return user1;
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public void setUser1(User user1) {
-        this.user1 = user1;
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
     }
 
-    public User getUser2() {
-        return user2;
+    public Player getPlayer2() {
+        return player2;
     }
 
-    public void setUser2(User user2) {
-        this.user2 = user2;
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
     }
 }

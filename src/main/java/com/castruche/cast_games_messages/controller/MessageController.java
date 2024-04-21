@@ -1,7 +1,7 @@
 package com.castruche.cast_games_messages.controller;
 
 
-import com.castruche.cast_games_messages.dto.MessageDto;
+import com.castruche.cast_games_messages.dto.MessageReceptionDto;
 import com.castruche.cast_games_messages.service.MessageService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +17,10 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @PostMapping()
-    public MessageDto getProfile(@RequestBody MessageDto messageDto) {
-        return messageService.send(messageDto);
-    }
+   /* @PostMapping()
+    public MessageReceptionDto getProfile(@RequestBody MessageReceptionDto messageReceptionDto) {
+        return messageService.send(messageReceptionDto);
+    }*/
 
 
 }

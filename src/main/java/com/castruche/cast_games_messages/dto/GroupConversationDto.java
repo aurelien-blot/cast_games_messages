@@ -3,10 +3,10 @@ package com.castruche.cast_games_messages.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class GroupConversationDto extends AbstractDto {
+public class GroupConversationDto extends ConversationDto {
     private String name;
 
-    private List<UserDto> users;
+    private List<PlayerDto> players;
 
     public String getName() {
         return name;
@@ -16,11 +16,11 @@ public class GroupConversationDto extends AbstractDto {
         this.name = name;
     }
 
-    public List<UserDto> getUsers() {
-        return users;
+    public List<PlayerDto> getPlayers() {
+        return players;
     }
 
-    public void setUsers(List<UserDto> users) {
-        this.users = users;
+    public void setPlayers(List<PlayerDto> players) {
+        this.players = players;
     }
 }

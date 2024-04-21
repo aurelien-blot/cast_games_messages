@@ -2,6 +2,7 @@ package com.castruche.cast_games_messages.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -9,6 +10,9 @@ import java.util.Date;
 @Entity
 public class Message  extends AbstractEntity{
     private String content;
+
+    @ManyToOne
+    private Player author;
 
     private LocalDateTime readAt;
 
@@ -37,5 +41,13 @@ public class Message  extends AbstractEntity{
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
+    }
+
+    public Player getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Player author) {
+        this.author = author;
     }
 }
