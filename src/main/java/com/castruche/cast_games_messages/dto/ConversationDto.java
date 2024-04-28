@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ConversationDto extends AbstractDto {
 
+    private String name;
     private List<MessageDto> messages;
 
     private ConversationType type;
@@ -24,5 +25,13 @@ public class ConversationDto extends AbstractDto {
 
     public void setType(ConversationType type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

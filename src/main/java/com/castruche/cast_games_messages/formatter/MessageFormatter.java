@@ -16,12 +16,10 @@ import org.springframework.stereotype.Service;
 public class MessageFormatter implements IFormatter<Message, MessageDto>{
 
     private PlayerService playerService;
-    private ConversationService conversationService;
 
 
-    public MessageFormatter(PlayerService playerService, ConversationService conversationService) {
+    public MessageFormatter(PlayerService playerService) {
         this.playerService = playerService;
-        this.conversationService = conversationService;
     }
 
     @Override
@@ -45,12 +43,12 @@ public class MessageFormatter implements IFormatter<Message, MessageDto>{
         entity.setId(dto.getId());
         entity.setContent(dto.getContent());
         entity.setReadAt(dto.getReadAt());
-        if(dto.getConversationId()!=null){
+        /*if(dto.getConversationId()!=null){
             Conversation conversation = conversationService.selectById(dto.getConversationId(), dto.getConversationType());
             if(null!=conversation){
                 entity.setConversation(conversation);
             }
-        }
+        }*/
         if(dto.getAuthor()!=null){
             Player player = playerService.selectById(dto.getAuthor().getId());
             if(player != null){

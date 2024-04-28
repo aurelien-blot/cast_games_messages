@@ -3,10 +3,13 @@ package com.castruche.cast_games_messages.controller;
 
 import com.castruche.cast_games_messages.dto.MessageReceptionDto;
 import com.castruche.cast_games_messages.service.MessageService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.castruche.cast_games_messages.service.SseService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static com.castruche.cast_games_messages.controller.ConstantUrl.CONVERSATION;
 import static com.castruche.cast_games_messages.controller.ConstantUrl.MESSAGE;
@@ -15,15 +18,14 @@ import static com.castruche.cast_games_messages.controller.ConstantUrl.MESSAGE;
 @RequestMapping(CONVERSATION)
 public class ConversationController {
 
-    private final MessageService messageService;
-    public ConversationController(MessageService messageService) {
-        this.messageService = messageService;
+    private final SseService sseService;
+    public ConversationController(SseService sseService) {
+        this.sseService = sseService;
     }
 
-    /*@PostMapping()
-    public MessageReceptionDto getProfile(@RequestBody MessageReceptionDto messageReceptionDto) {
-        return messageService.send(messageReceptionDto);
-    }*/
-
+    @GetMapping("/stream/{sourcePlayerId}")
+    public SseEmitter streamConversations(@PathVariable Long sourcePlayerId) {
+        return this.sseService.initConversations(sourcePlayerId);
+    }
 
 }

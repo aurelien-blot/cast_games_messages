@@ -3,6 +3,8 @@ package com.castruche.cast_games_messages.formatter;
 
 import com.castruche.cast_games_messages.dto.ConversationDto;
 import com.castruche.cast_games_messages.dto.ConversationDto;
+import com.castruche.cast_games_messages.dto.GroupConversationDto;
+import com.castruche.cast_games_messages.dto.PrivateConversationDto;
 import com.castruche.cast_games_messages.entity.Conversation;
 import com.castruche.cast_games_messages.entity.Conversation;
 import com.castruche.cast_games_messages.entity.GroupConversation;
@@ -13,15 +15,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConversationFormatter implements IFormatter<Conversation, ConversationDto>{
 
-    
+    private PrivateConversationFormatter privateConversationFormatter;
+    private GroupConversationFormatter groupConversationFormatter;
+
+    public ConversationFormatter(PrivateConversationFormatter privateConversationFormatter, GroupConversationFormatter groupConversationFormatter){
+        this.privateConversationFormatter = privateConversationFormatter;
+        this.groupConversationFormatter = groupConversationFormatter;
+    }
+
     @Override
     public ConversationDto entityToDto(Conversation entity) {
         if(entity == null){
             return null;
         }
-        ConversationDto dto = new ConversationDto();
-        dto.setId(entity.getId());
-        return dto;
+       if(entity instanceof PrivateConversation){
+            return privateConversationFormatter.entityToDto((PrivateConversation) entity);
+        }
+        else if(entity instanceof GroupConversation){
+            return groupConversationFormatter.entityToDto((GroupConversation) entity);
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

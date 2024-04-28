@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PrivateConversationService extends GenericService<PrivateConversation, PrivateConversationDto> implements IConversationService{
@@ -56,6 +57,21 @@ public class PrivateConversationService extends GenericService<PrivateConversati
         message.setContent(messageReceptionDto.getContent());
         message.setConversationId(privateConversation.getId());
         message = messageService.create(message);
+    }
+
+    public List<PrivateConversationDto> findByPlayerId(Long playerId){
+        List<PrivateConversation> entities = privateConversationRepository.findByPlayer1IdOrPlayer2Id(playerId, playerId);
+        List<PrivateConversationDto> results = privateConversationFormatter.entityToDto(entities);
+        for(PrivateConversationDto dto : results){
+            if(null!=dto.getPlayer1() && null!=dto.getPlayer2()){
+                if(dto.getPlayer1().getId().equals(playerId)){
+                    dto.setName(dto.getPlayer2().getUsername());
+                } else {
+                    dto.setName(dto.getPlayer1().getUsername());
+                }
+            }
+        }
+        return results;
     }
 
 

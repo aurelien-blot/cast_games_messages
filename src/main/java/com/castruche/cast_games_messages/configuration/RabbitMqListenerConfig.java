@@ -86,6 +86,6 @@ public class RabbitMqListenerConfig {
 
     @RabbitListener(queues = CONVERSATION_QUEUE_NAME)
     public void receiveConversationListRequest(@Payload Long playerId) {
-        conversationService.selectDtoAllByPlayerId(playerId);
+        conversationService.getConversationListForPlayer(playerId);
     }
 }

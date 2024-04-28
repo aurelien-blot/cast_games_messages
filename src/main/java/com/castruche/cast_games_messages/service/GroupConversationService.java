@@ -64,4 +64,9 @@ public class GroupConversationService extends GenericService<GroupConversation, 
         return String.join(", ", usernameList);
     }
 
+    public List<GroupConversationDto> findByPlayersId(Long playerId){
+        List<GroupConversation> groupConversationList = groupConversationRepository.findByPlayersId(playerId);
+        return groupConversationFormatter.entityToDto(groupConversationList);
+    }
+
 }
