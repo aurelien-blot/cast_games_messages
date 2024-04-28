@@ -2,6 +2,7 @@ package com.castruche.cast_games_messages.dto;
 
 import com.castruche.cast_games_messages.enums.ConversationType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConversationDto extends AbstractDto {
@@ -33,5 +34,17 @@ public class ConversationDto extends AbstractDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<PlayerDto> getMembers(){
+        List<PlayerDto> members = new ArrayList<>();
+        if(this.type.equals(ConversationType.GROUP_CONVERSATION)){
+            members.addAll(((GroupConversationDto)this).getPlayers());
+        }
+        else if(this.type.equals(ConversationType.PRIVATE_CONVERSATION)){
+            members.add(((PrivateConversationDto)this).getPlayer1());
+            members.add(((PrivateConversationDto)this).getPlayer2());
+        }
+        return members;
     }
 }

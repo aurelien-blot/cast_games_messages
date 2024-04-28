@@ -50,7 +50,7 @@ public class MessageReceptionService {
         allPlayers.add(message.getSender());
         playerService.createIfPlayersNotExist(allPlayers);
         if (message.getConversationId() != null) {
-
+            //TODO  C EST ICI QU IL FAUT FAIRE LE TRAITEMENT POUR LES MESSAGES RECUS
         }
         else{
             if(message.getMembers()!=null ){
