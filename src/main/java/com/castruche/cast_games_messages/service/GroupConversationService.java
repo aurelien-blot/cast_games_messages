@@ -1,14 +1,13 @@
 package com.castruche.cast_games_messages.service;
 
 import com.castruche.cast_games_messages.dao.GroupConversationRepository;
-import com.castruche.cast_games_messages.dto.GroupConversationDto;
-import com.castruche.cast_games_messages.dto.MessageDto;
-import com.castruche.cast_games_messages.dto.MessageReceptionDto;
-import com.castruche.cast_games_messages.dto.PlayerLightDto;
+import com.castruche.cast_games_messages.dto.*;
+import com.castruche.cast_games_messages.entity.Conversation;
 import com.castruche.cast_games_messages.entity.GroupConversation;
 import com.castruche.cast_games_messages.entity.Player;
 import com.castruche.cast_games_messages.enums.ConversationType;
 import com.castruche.cast_games_messages.formatter.GroupConversationFormatter;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,8 @@ public class GroupConversationService extends GenericService<GroupConversation, 
     }
 
     @Override
-    public void createConservation(MessageReceptionDto messageReceptionDto) {
+    @Transactional
+    public Conversation createConservation(MessageReceptionDto messageReceptionDto) {
         GroupConversation groupConversation = new GroupConversation();
         Player player1 = this.playerService.selectBySourcePlayerId(messageReceptionDto.getSender().getId());
         List<Player> players = this.playerService.selectBySourcePlayerIdIn(messageReceptionDto.getMembers().stream().map(PlayerLightDto::getId).toList());
@@ -50,10 +50,10 @@ public class GroupConversationService extends GenericService<GroupConversation, 
         groupConversation = groupConversationRepository.save(groupConversation);
         MessageDto message = new MessageDto();
         message.setConversationType(ConversationType.GROUP_CONVERSATION);
-        message.setAuthor(player1);
         message.setContent(messageReceptionDto.getContent());
         message.setConversationId(groupConversation.getId());
-        message = messageService.create(message);
+        message = messageService.createFromConversation(message, player1);
+        return this.selectById(groupConversation.getId());
     }
 
     private String getConversationName(GroupConversation groupConversation){

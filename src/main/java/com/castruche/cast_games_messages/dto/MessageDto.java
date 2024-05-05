@@ -13,8 +13,7 @@ public class MessageDto extends AbstractDto {
     private ConversationType conversationType;
     private String content;
 
-    @ManyToOne
-    private Player author;
+    private Long authorId;
 
     private LocalDateTime readAt;
 
@@ -34,12 +33,12 @@ public class MessageDto extends AbstractDto {
         this.content = content;
     }
 
-    public Player getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(Player author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public LocalDateTime getReadAt() {

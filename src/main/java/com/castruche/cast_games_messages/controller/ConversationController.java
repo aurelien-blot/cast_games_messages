@@ -2,6 +2,7 @@ package com.castruche.cast_games_messages.controller;
 
 
 import com.castruche.cast_games_messages.dto.MessageReceptionDto;
+import com.castruche.cast_games_messages.service.ConversationService;
 import com.castruche.cast_games_messages.service.MessageService;
 import com.castruche.cast_games_messages.service.SseService;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,14 @@ import static com.castruche.cast_games_messages.controller.ConstantUrl.MESSAGE;
 @RequestMapping(CONVERSATION)
 public class ConversationController {
 
-    private final SseService sseService;
-    public ConversationController(SseService sseService) {
-        this.sseService = sseService;
+    private final ConversationService conversationService;
+    public ConversationController(ConversationService conversationService) {
+        this.conversationService = conversationService;
     }
 
     @GetMapping("/stream/{sourcePlayerId}")
     public SseEmitter streamConversations(@PathVariable Long sourcePlayerId) {
-        return this.sseService.initConversations(sourcePlayerId);
+        return this.conversationService.initConversations(sourcePlayerId);
     }
 
 }

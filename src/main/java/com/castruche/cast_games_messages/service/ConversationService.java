@@ -16,6 +16,7 @@ import com.castruche.cast_games_messages.formatter.ConversationFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,10 +33,13 @@ public class ConversationService extends GenericService<Conversation, Conversati
     private GroupConversationService groupConversationService;
     private PrivateConversationService privateConversationService;
 
+    private SseService sseService;
+
     public ConversationService(PlayerService playerService,
                                ConversationRepository conversationRepository,
                                GroupConversationService groupConversationService,
                                PrivateConversationService privateConversationService,
+                               SseService sseService,
                                ConversationFormatter conversationFormatter){
         super(conversationRepository, conversationFormatter);
         this.playerService = playerService;
@@ -43,6 +47,7 @@ public class ConversationService extends GenericService<Conversation, Conversati
         this.groupConversationService = groupConversationService;
         this.privateConversationService = privateConversationService;
         this.conversationFormatter = conversationFormatter;
+        this.sseService = sseService;
     }
     public Conversation selectById(Long id, ConversationType conversationType){
         if(conversationType.equals(ConversationType.PRIVATE_CONVERSATION)){
@@ -52,6 +57,11 @@ public class ConversationService extends GenericService<Conversation, Conversati
             return groupConversationService.selectById(id);
         }
         return null;
+    }
+
+    public SseEmitter initConversations(Long sourcePlayerId) {
+        List<ConversationDto> getConversationListForPlayer = getConversationListForPlayer(sourcePlayerId);
+        return sseService.initConversations(sourcePlayerId, getConversationListForPlayer);
     }
 
     public List<ConversationDto> getConversationListForPlayer(Long sourcePlayerId){

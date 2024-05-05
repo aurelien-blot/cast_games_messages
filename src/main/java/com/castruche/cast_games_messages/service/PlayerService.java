@@ -37,6 +37,7 @@ public class PlayerService extends GenericService<Player, PlayerDto>{
         return this.playerRepository.findBySourcePlayerIdIn(ids);
     }
 
+    @Transactional
     public Player selectBySourcePlayerId(Long sourcePlayerId){
         return this.playerRepository.findBySourcePlayerId(sourcePlayerId);
     }

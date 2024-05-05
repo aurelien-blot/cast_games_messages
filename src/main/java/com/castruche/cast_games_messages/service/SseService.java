@@ -18,16 +18,6 @@ public class SseService {
     private static final String INIT_CONVERSATIONS = "INIT_CONVERSATIONS";
     private static final String UPDATE_CONVERSATIONS = "UPDATE_CONVERSATIONS";
     private Map<Long, SseEmitter> userEmitters = new ConcurrentHashMap<>();
-    private ConversationService conversationService;
-
-    public SseService(ConversationService conversationService) {
-        this.conversationService = conversationService;
-    }
-
-    public SseEmitter initConversations(Long sourcePlayerId) {
-        List<ConversationDto> getConversationListForPlayer = conversationService.getConversationListForPlayer(sourcePlayerId);
-        return initConversations(sourcePlayerId, getConversationListForPlayer);
-    }
 
     public SseEmitter initConversations(Long sourcePlayerId, List<ConversationDto> conversationList) {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
@@ -47,14 +37,14 @@ public class SseService {
         return emitter;
     }
 
-    public void updateConversations(Long sourcePlayerId, List<ConversationDto> conversationList) {
+    public void updateConversationForPlayer(Long sourcePlayerId, ConversationDto updatedConversation) {
         SseEmitter emitter = userEmitters.get(sourcePlayerId);
         if (emitter == null) {
-            logger.warn("No emitter found for player " + sourcePlayerId);
+            //logger.warn("No emitter found for player " + sourcePlayerId);
             return;
         }
         try {
-            emitter.send(SseEmitter.event().name(UPDATE_CONVERSATIONS).data(conversationList));
+            emitter.send(SseEmitter.event().name(UPDATE_CONVERSATIONS).data(updatedConversation));
         } catch (IOException e) {
             userEmitters.remove(sourcePlayerId);
             logger.error("Error sending SSE", e);

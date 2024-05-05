@@ -2,10 +2,8 @@ package com.castruche.cast_games_messages.service;
 
 import com.castruche.cast_games_messages.dao.MessageRepository;
 import com.castruche.cast_games_messages.dao.PrivateConversationRepository;
-import com.castruche.cast_games_messages.dto.GroupConversationDto;
-import com.castruche.cast_games_messages.dto.MessageDto;
-import com.castruche.cast_games_messages.dto.MessageReceptionDto;
-import com.castruche.cast_games_messages.dto.PrivateConversationDto;
+import com.castruche.cast_games_messages.dto.*;
+import com.castruche.cast_games_messages.entity.Conversation;
 import com.castruche.cast_games_messages.entity.Message;
 import com.castruche.cast_games_messages.entity.Player;
 import com.castruche.cast_games_messages.entity.PrivateConversation;
@@ -43,7 +41,8 @@ public class PrivateConversationService extends GenericService<PrivateConversati
     }
 
     @Override
-    public void createConservation(MessageReceptionDto messageReceptionDto) {
+    @Transactional
+    public Conversation createConservation(MessageReceptionDto messageReceptionDto) {
         PrivateConversation privateConversation = new PrivateConversation();
         Player player1 = this.playerService.selectBySourcePlayerId(messageReceptionDto.getSender().getId());
         Player player2 = this.playerService.selectBySourcePlayerId(messageReceptionDto.getMembers().get(0).getId());
@@ -53,25 +52,30 @@ public class PrivateConversationService extends GenericService<PrivateConversati
         privateConversation = privateConversationRepository.save(privateConversation);
         MessageDto message = new MessageDto();
         message.setConversationType(ConversationType.PRIVATE_CONVERSATION);
-        message.setAuthor(player1);
         message.setContent(messageReceptionDto.getContent());
         message.setConversationId(privateConversation.getId());
-        message = messageService.create(message);
+        message = messageService.createFromConversation(message, player1);
+        return this.selectById(privateConversation.getId());
     }
 
     public List<PrivateConversationDto> findByPlayerId(Long playerId){
         List<PrivateConversation> entities = privateConversationRepository.findByPlayer1IdOrPlayer2Id(playerId, playerId);
         List<PrivateConversationDto> results = privateConversationFormatter.entityToDto(entities);
         for(PrivateConversationDto dto : results){
-            if(null!=dto.getPlayer1() && null!=dto.getPlayer2()){
-                if(dto.getPlayer1().getId().equals(playerId)){
-                    dto.setName(dto.getPlayer2().getUsername());
-                } else {
-                    dto.setName(dto.getPlayer1().getUsername());
-                }
-            }
+            dto.setName(getConversationName(dto, playerId));
         }
         return results;
+    }
+
+    public String getConversationName(PrivateConversationDto privateConversation, Long currentPlayerId){
+        if(null!=privateConversation.getPlayer1() && null!=privateConversation.getPlayer2()){
+            if(privateConversation.getPlayer1().getId().equals(currentPlayerId)){
+                return privateConversation.getPlayer2().getUsername();
+            } else {
+                return privateConversation.getPlayer1().getUsername();
+            }
+        }
+        return null;
     }
 
 
